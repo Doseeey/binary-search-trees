@@ -33,6 +33,10 @@ if __name__ == "__main__":
 
     t2.print_tree()
 
+    t2.delete_node(1)
+
+    t2.print_tree()
+
     lookup_number = 9
     found = t2.search(lookup_number)
     if found[0]:

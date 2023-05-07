@@ -41,9 +41,9 @@ class RedBlackTree:
             else:
                 node.parent.right = node
 
-            self._insert(node)
+            self._insert_fix(node)
 
-    def _insert(self, node):
+    def _insert_fix(self, node):
         while node.parent.color: #while red
             if node.parent == node.parent.parent.left:
                 uncle = node.parent.parent.left
@@ -136,16 +136,114 @@ class RedBlackTree:
         else:
             return True, steps
     
-    # def print_tree(self):
-    #     self._print_tree(self.root)
+    def delete_node(self, val):
+        return self._delete_node(self.root, val) 
 
-    # def _print_tree(self, node, level=0):
-    #     if node != self.nil:
-    #         indent = "    " * level
-    #         color = "R" if node.color == 1 else "B"
-    #         print(f"{indent}{color}: {node.val}")
-    #         self._print_tree(node.left, level + 1)
-    #         self._print_tree(node.right, level + 1)
+    def _delete_node(self, node, val):
+        z = self.nil
+        while node != self.nil:
+            if node.val == val:
+                z = node
+            if node.val <= val:
+                node = node.right
+            else:
+                node = node.left
+
+        if z == self.nil:
+            return
+        
+        temp = z
+        temp_original_color = temp.color
+
+        if z.left == self.nil:
+            x = z.right
+            self.transplant(z, z.right)
+        elif z.right == self.nil:
+            x = z.left
+            self.transplant(z, z.left)
+        else:
+            temp = self.minimum(z.right)
+            temp_original_color = temp.color
+            x = temp.right
+
+            if temp.parent == z:
+                x.parent = temp
+            else:
+                self.transplant(temp, temp.right)
+                temp.right = z.right
+                temp.right.parent = temp
+
+            self.transplant(z, temp)
+            temp.left = z.left
+            temp.left.parent = temp
+            temp.color = z.color
+
+        if temp_original_color == 0:
+            self._delete_fix(x)
+
+    def _delete_fix(self, node):
+        while node != self.root and node.color == 0:
+            if node == node.parent.left:
+                s = node.parent.right
+                if s.color:
+                    s.color = 0
+                    node.parent.color = 1
+                    self.left_rotate(node.parent)
+                    s = node.parent.right
+                
+                if s.left.color == 0 and s.right.color == 0:
+                    s.color = 1
+                    node = node.parent
+                else:
+                    if s.right.color == 0:
+                        s.left.color = 0
+                        s.color = 1
+                        self.right_rotate(s)
+                        s = node.parent.right
+
+                    s.color = node.parent.color
+                    node.parent.color = 0
+                    s.right.color = 0
+                    self.left_rotate(node.parent)
+                    node = self.root
+            else:
+                s = node.parent.left
+                if s.color:
+                    s.color = 0
+                    node.parent.color = 1
+                    self.right_rotate(node.parent)
+                    s = node.parent.left
+                
+                if s.right.color == 0 and s.left.color == 0:
+                    s.color = 1
+                    node = node.parent
+                else:
+                    if s.left.color == 0:
+                        s.right.color == 0
+                        s.color = 1
+                        self.left_rotate(s)
+                        s = node.parent.left
+                
+                s.color = node.parent.color
+                node.parent.color = 0
+                s.left.color = 0
+                self.right_rotate(node.parent)
+                node = self.root
+        node.color = 0
+
+    def minimum(self, node):
+        while node.left != self.nil:
+            node = node.left
+        return node
+
+    def transplant(self, a, b):
+        if a.parent == None:
+            self.root = b
+        elif a == a.parent.left:
+            a.parent.left = b
+        else:
+            a.parent.right = a
+        a.parent = b.parent
 
     def print_tree(self):
         lines, *_ = self._print_tree(self.root)
