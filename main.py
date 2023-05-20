@@ -48,3 +48,5 @@ if __name__ == "__main__":
     t3 = AVLTree()
     fill_tree(t3, 10)
     t3.print_tree()
+    z = t3.search(8)
+    print(z[1])

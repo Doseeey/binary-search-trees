@@ -82,6 +82,22 @@ class AVLTree:
             return self._left_rotate(node)
         
         return node
+    
+    def search(self, value):
+        steps = 0
+        return self._search_node(self.root, value, steps)
+
+    def _search_node(self, root, value, steps):
+        if not root or root.val == value:
+            steps += 1
+            return True, steps
+
+        if value < root.val:
+            steps += 1
+            return self._search_node(root.left, value, steps)
+        else:
+            steps += 1
+            return self._search_node(root.right, value, steps)
         
 
     def _left_rotate(self, node):
@@ -133,7 +149,7 @@ class AVLTree:
     def _print_tree(self, node):
         # No wings.
         if node.right is None and node.left is None:
-            line = '%s' % node.val
+            line = f'{node.val} ({node.height})'
             width = len(line)
             height = 1
             middle = width // 2
@@ -142,7 +158,7 @@ class AVLTree:
         # No right wing.
         if node.right is None:
             lines, n, p, x = self._print_tree(node.left)
-            s = '%s' % node.val
+            s = f'{node.val} ({node.height})'
             u = len(s)
             first_line = (x + 1) * ' ' + (n - x - 1) * '_' + s
             second_line = x * ' ' + '/' + (n - x - 1 + u) * ' '
@@ -152,7 +168,7 @@ class AVLTree:
         # No left wing.
         if node.left is None:
             lines, n, p, x = self._print_tree(node.right)
-            s = '%s' % node.val
+            s = f'{node.val} ({node.height})'
             u = len(s)
             first_line = s + x * '_' + (n - x) * ' '
             second_line = (u + x) * ' ' + '\\' + (n - x - 1) * ' '
@@ -162,7 +178,7 @@ class AVLTree:
         # Both wings.
         left, n, p, x = self._print_tree(node.left)
         right, m, q, y = self._print_tree(node.right)
-        s = '%s' % node.val
+        s = f'{node.val} ({node.height})'
         u = len(s)
         first_line = (x + 1) * ' ' + (n - x - 1) * '_' + s + y * '_' + (m - y) * ' '
         second_line = x * ' ' + '/' + (n - x - 1 + u + y) * ' ' + '\\' + (m - y - 1) * ' '
