@@ -43,6 +43,37 @@ class RedBlackTree:
 
             self._insert_fix(node)
 
+    def insert_bulk(self, arr):
+        for val in arr:
+            node = Node(val)
+            node.left = self.nil
+            node.right = self.nil
+            node.parent = None
+
+            if self.root == self.nil:
+                self.root = node
+                node.color = 0
+            else:
+                curr = self.root
+                while curr != self.nil:
+                    node.parent = curr
+                    if node.val < curr.val:
+                        curr = curr.left
+                    else:
+                        curr = curr.right
+
+                node.color = 1
+                node.parent = node.parent
+
+                if node.parent == None:
+                    self.root = node
+                elif node.val < node.parent.val:
+                    node.parent.left = node
+                else:
+                    node.parent.right = node
+
+        self._insert_fix(node)
+
     def _insert_fix(self, node):
         while node.parent.color: #while red
             if node.parent == node.parent.parent.left:

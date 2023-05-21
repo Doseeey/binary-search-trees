@@ -3,6 +3,7 @@ from redblack import RedBlackTree
 from avl import AVLTree
 from random import randint
 from datetime import datetime
+import csv
 
 def values_list(size):
     values = []
@@ -37,13 +38,28 @@ def fill_time_comparision(type):
         print(f" - Inserting {size} elements took {stop - start} time.")
     return
 
+def insert_time_benchmark(tree):
+    #Benchmark for 10000 inserts
+    size = 20000
+    values = values_list(size)
+
+    for i in range(size-1):
+        start = datetime.now()
+        tree.insert(values[i])
+        stop = datetime.now()
+        print(f"{i+1}: {stop-start}")
+
 if __name__ == "__main__":
     t1 = BST()
-    fill_tree(t1, 50)
-    fill_time_comparision("BST")
+
+    # fill_time_comparision("BST")
     fill_time_comparision("RedBlack")
-    fill_time_comparision("AVL")
+    # fill_time_comparision("AVL")
     # t1.print_tree()
+
+    values = values_list(20000)
+    t2 = RedBlackTree()
+    t2.insert_bulk(values)
 
     # lookup_number = 9
     # found = t1.search(lookup_number)
