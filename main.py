@@ -38,6 +38,16 @@ def fill_time_comparision(type):
         print(f" - Inserting {size} elements took {stop - start} time.")
     return
 
+def search_and_delete(tree, values):
+    results = {}
+    for value in values:
+        s = tree.search(value)
+        if s[1]:
+            print(f"Found {value} after {s[1]} steps. Now deleting value from the tree.")
+            tree.delete(value)
+            results[value] = s[1]
+    return results
+
 def insert_time_benchmark(tree):
     #Benchmark for 10000 inserts
     size = 20000
@@ -51,41 +61,30 @@ def insert_time_benchmark(tree):
 
 if __name__ == "__main__":
     t1 = BST()
-
-    # fill_time_comparision("BST")
-    fill_time_comparision("RedBlack")
-    # fill_time_comparision("AVL")
-    # t1.print_tree()
-
-    values = values_list(20000)
     t2 = RedBlackTree()
-    t2.insert_bulk(values)
+    t3 = AVLTree()
 
-    # lookup_number = 9
-    # found = t1.search(lookup_number)
-    # if found[0]:
-    #     print(f"Node with value {lookup_number} found after {found[1]} steps.")
-    # else:
-    #     print(f"Node with value {lookup_number} not found.")
-    
-    # t2 = RedBlackTree()
-    # fill_tree(t2, 10)
+    values = values_list(10)
+    #print(values)
+    #values = [6, 10, 7, 8, 2, 9, 5, 3, 1, 4]
+    for i in values:
+        t1.insert(i)
+        t2.insert(i)
+        t3.insert(i)
 
+    t1.print_tree()
+    t2.print_tree()
+    t3.print_tree()
+    # values = [10, 25, 55, 900, 473, 478, 484, 233, 555, 111]
+    # r1 = search_and_delete(t1, values)
+    # r2 = search_and_delete(t2, values)
+    # r3 = search_and_delete(t3, values)
+
+    # print("====Summary Table====")
+    # print("Value ----- BST ------ RedBlack ----- AVL")
+    # for value in values:
+    #     print(f"{value} ----- {r1[value]} ----- {r2[value]} ----- {r3[value]}")
+
+    # t1.print_tree()
     # t2.print_tree()
-
-    # t2.delete_node(1)
-
-    # t2.print_tree()
-
-    # lookup_number = 9
-    # found = t2.search(lookup_number)
-    # if found[0]:
-    #     print(f"Node with value {lookup_number} found after {found[1]} steps.")
-    # else:
-    #     print(f"Node with value {lookup_number} not found.")
-
-    # t3 = AVLTree()
-    # fill_tree(t3, 10)
     # t3.print_tree()
-    # z = t3.search(8)
-    # print(z[1])

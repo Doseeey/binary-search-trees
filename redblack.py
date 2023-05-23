@@ -167,10 +167,10 @@ class RedBlackTree:
         else:
             return True, steps
     
-    def delete_node(self, val):
-        return self._delete_node(self.root, val) 
+    def delete(self, val):
+        return self._delete(self.root, val) 
 
-    def _delete_node(self, node, val):
+    def _delete(self, node, val):
         z = self.nil
         while node != self.nil:
             if node.val == val:
